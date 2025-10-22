@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Dashboard - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-tachometer-alt"></i> Welcome, {{ session.username }}!</h1>
+                <p class="lead">Discover amazing travel experiences and plan your next adventure</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ url_for('customer_search_hotels') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Search Hotels
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ url_for('customer_packages') }}" class="btn btn-success w-100">
+                                <i class="fas fa-map-marked-alt"></i> View Packages
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ url_for('customer_profile') }}" class="btn btn-info w-100">
+                                <i class="fas fa-user"></i> My Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Hotels Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="search-container">
+                <h5><i class="fas fa-hotel"></i> Find Hotels by Location</h5>
+                <form method="GET" action="{{ url_for('customer_search_hotels') }}">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control search-input" name="location" 
+                                   placeholder="Enter city, state, or country..." value="{{ request.args.get('location', '') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn search-btn w-100">
+                                <i class="fas fa-search"></i> Search Hotels
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Tourism Packages -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-star"></i> Featured Tourism Packages</h5>
+                    <a href="{{ url_for('customer_packages') }}" class="btn btn-outline-primary btn-sm">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if packages %}
+                        <div class="row">
+                            {% for package in packages[:3] %}
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="package-card">
+                                    <div class="package-title">{{ package.title }}</div>
+                                    <div class="package-destination">
+                                        <i class="fas fa-map-marker-alt"></i> {{ package.destination }}
+                                    </div>
+                                    <div class="package-description">
+                                        {{ package.description[:100] }}{% if package.description|length > 100 %}...{% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="package-price">${{ "%.2f"|format(package.price) }}</div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock"></i> {{ package.duration_days or 1 }} day{{ 's' if package.duration_days != 1 else '' }}
+                                        </small>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-user"></i> Created by {{ package.created_by_name }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No tourism packages available at the moment.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Hotels -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-hotel"></i> Featured Hotels</h5>
+                    <a href="{{ url_for('customer_search_hotels') }}" class="btn btn-outline-primary btn-sm">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if hotels %}
+                        <div class="row">
+                            {% for hotel in hotels[:3] %}
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="hotel-card">
+                                    <div class="hotel-name">{{ hotel.name }}</div>
+                                    <div class="hotel-location">
+                                        <i class="fas fa-map-marker-alt"></i> {{ hotel.location }}
+                                    </div>
+                                    <div class="hotel-description">
+                                        {{ hotel.description[:100] }}{% if hotel.description|length > 100 %}...{% endif %}
+                                    </div>
+                                    {% if hotel.amenities %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-star"></i> {{ hotel.amenities[:50] }}{% if hotel.amenities|length > 50 %}...{% endif %}
+                                        </small>
+                                    </div>
+                                    {% endif %}
+                                    {% if hotel.contact_info %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone"></i> {{ hotel.contact_info }}
+                                        </small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-hotel fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No hotels available at the moment.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Travel Tips -->
+    <div class="row">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-lightbulb"></i> Travel Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-passport fa-2x text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Check Travel Documents</h6>
+                                    <p class="text-muted small">Ensure your passport and visas are up to date before booking.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-weather-sun fa-2x text-warning"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Check Weather</h6>
+                                    <p class="text-muted small">Research the weather conditions for your destination and pack accordingly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-shield-alt fa-2x text-success"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Travel Insurance</h6>
+                                    <p class="text-muted small">Consider purchasing travel insurance for peace of mind during your trip.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

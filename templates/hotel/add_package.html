@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}Add Hotel Package - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-plus"></i> Add New Hotel Package</h1>
+                <p class="lead">Create an attractive package to showcase your hotel's offerings</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <form method="POST" action="{{ url_for('hotel_add_package') }}" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            <i class="fas fa-tag"></i> Package Title
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" required 
+                               placeholder="e.g., Romantic Weekend Getaway, Family Fun Package">
+                        <div class="invalid-feedback">
+                            Please provide a package title.
+                        </div>
+                        <div class="form-text">Choose a catchy title that describes your package</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            <i class="fas fa-align-left"></i> Package Description
+                        </label>
+                        <textarea class="form-control" id="description" name="description" rows="6" required 
+                                  placeholder="Describe what's included in this package, special features, and what makes it unique..."></textarea>
+                        <div class="invalid-feedback">
+                            Please provide a detailed description.
+                        </div>
+                        <div class="form-text">Be detailed about what guests will get with this package</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i> Package Price
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price" name="price" required 
+                                           min="0" step="0.01" placeholder="0.00">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid price.
+                                </div>
+                                <div class="form-text">Set a competitive price for your package</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="duration" class="form-label">
+                                    <i class="fas fa-clock"></i> Package Duration
+                                </label>
+                                <select class="form-control" id="duration" name="duration">
+                                    <option value="1">1 Night</option>
+                                    <option value="2">2 Nights</option>
+                                    <option value="3">3 Nights</option>
+                                    <option value="7">1 Week</option>
+                                    <option value="14">2 Weeks</option>
+                                    <option value="30">1 Month</option>
+                                </select>
+                                <div class="form-text">How long is this package valid for?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="amenities" class="form-label">
+                            <i class="fas fa-star"></i> Package Amenities & Inclusions
+                        </label>
+                        <textarea class="form-control" id="amenities" name="amenities" rows="4" 
+                                  placeholder="List all amenities and services included in this package (e.g., Free WiFi, Breakfast, Pool Access, Spa Treatment, etc.)"></textarea>
+                        <div class="form-text">Be specific about what's included to attract more guests</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="terms" class="form-label">
+                            <i class="fas fa-file-contract"></i> Terms & Conditions
+                        </label>
+                        <textarea class="form-control" id="terms" name="terms" rows="3" 
+                                  placeholder="Any special terms, cancellation policies, or restrictions for this package..."></textarea>
+                        <div class="form-text">Optional: Add any special terms or conditions</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="validity" class="form-label">
+                            <i class="fas fa-calendar"></i> Package Validity
+                        </label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="start_date" name="start_date">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="end_date" name="end_date">
+                            </div>
+                        </div>
+                        <div class="form-text">Optional: Set specific dates when this package is available</div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="featured" name="featured">
+                        <label class="form-check-label" for="featured">
+                            <strong>Featured Package</strong>
+                        </label>
+                        <div class="form-text">Check this to highlight your package as a special offering</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Create Package
+                        </button>
+                        <a href="{{ url_for('hotel_dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Tips Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-lightbulb"></i> Package Creation Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6><i class="fas fa-tag text-primary"></i> Title Tips</h6>
+                        <ul class="small text-muted">
+                            <li>Use descriptive and attractive titles</li>
+                            <li>Include key benefits or themes</li>
+                            <li>Keep it concise but compelling</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-dollar-sign text-success"></i> Pricing Tips</h6>
+                        <ul class="small text-muted">
+                            <li>Research competitor pricing</li>
+                            <li>Consider seasonal variations</li>
+                            <li>Offer value for money</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-star text-warning"></i> Amenities Tips</h6>
+                        <ul class="small text-muted">
+                            <li>List all included services</li>
+                            <li>Highlight unique offerings</li>
+                            <li>Be specific about benefits</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-eye"></i> Package Preview</h5>
+                </div>
+                <div class="card-body">
+                    <div id="packagePreview">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-box fa-2x mb-2"></i>
+                            <p>Your package preview will appear here as you type...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Real-time package preview
+    function updatePreview() {
+        const title = document.getElementById('title').value || 'Package Title';
+        const description = document.getElementById('description').value || 'Package description will appear here...';
+        const price = document.getElementById('price').value || '0.00';
+        const amenities = document.getElementById('amenities').value || 'No amenities specified';
+        
+        const preview = document.getElementById('packagePreview');
+        preview.innerHTML = `
+            <div class="package-card">
+                <div class="package-title">${title}</div>
+                <div class="package-description">${description.substring(0, 100)}${description.length > 100 ? '...' : ''}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="package-price">$${parseFloat(price).toFixed(2)}</div>
+                    <small class="text-muted">
+                        <i class="fas fa-calendar"></i> ${new Date().toLocaleDateString()}
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-primary">
+                        <i class="fas fa-star"></i> Amenities
+                    </h6>
+                    <p class="text-muted small">${amenities.substring(0, 80)}${amenities.length > 80 ? '...' : ''}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Add event listeners for real-time preview
+    document.getElementById('title').addEventListener('input', updatePreview);
+    document.getElementById('description').addEventListener('input', updatePreview);
+    document.getElementById('price').addEventListener('input', updatePreview);
+    document.getElementById('amenities').addEventListener('input', updatePreview);
+
+    // Date validation
+    document.getElementById('start_date').addEventListener('change', function() {
+        const startDate = new Date(this.value);
+        const endDateInput = document.getElementById('end_date');
+        
+        if (this.value && endDateInput.value) {
+            const endDate = new Date(endDateInput.value);
+            if (endDate <= startDate) {
+                endDateInput.setCustomValidity('End date must be after start date');
+            } else {
+                endDateInput.setCustomValidity('');
+            }
+        }
+    });
+
+    document.getElementById('end_date').addEventListener('change', function() {
+        const endDate = new Date(this.value);
+        const startDateInput = document.getElementById('start_date');
+        
+        if (this.value && startDateInput.value) {
+            const startDate = new Date(startDateInput.value);
+            if (endDate <= startDate) {
+                this.setCustomValidity('End date must be after start date');
+            } else {
+                this.setCustomValidity('');
+            }
+        }
+    });
+
+    // Character counter for description
+    const descriptionTextarea = document.getElementById('description');
+    const counter = document.createElement('small');
+    counter.className = 'text-muted';
+    counter.style.float = 'right';
+    descriptionTextarea.parentNode.appendChild(counter);
+    
+    function updateCounter() {
+        const remaining = 1000 - descriptionTextarea.value.length;
+        counter.textContent = `${remaining} characters remaining`;
+        if (remaining < 100) {
+            counter.className = 'text-warning';
+        } else {
+            counter.className = 'text-muted';
+        }
+    }
+    
+    descriptionTextarea.addEventListener('input', updateCounter);
+    updateCounter();
+</script>
+{% endblock %}
+

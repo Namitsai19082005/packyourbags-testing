@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Tourism Management System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-map-marked-alt"></i> Tourism Management System</h1>
+                <p>Your gateway to amazing travel experiences, hotel bookings, and tourism packages</p>
+                <p class="lead">Choose your role to get started</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Role Selection Section -->
+<section class="role-cards">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="text-primary-custom">Choose Your Role</h2>
+                <p class="text-muted">Select the option that best describes you</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Customer Card -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="role-card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Customer</h3>
+                    <p>Looking for amazing travel experiences? Browse hotels, tourism packages, and connect with local guides to plan your perfect trip.</p>
+                    <button type="button" class="btn btn-role" onclick="selectRole('customer')">
+                        <i class="fas fa-arrow-right"></i> Continue as Customer
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Hotel Card -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="role-card">
+                    <div class="card-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <h3>Hotel Owner</h3>
+                    <p>Manage your hotel listings and create attractive packages for travelers. Showcase your amenities and attract more guests.</p>
+                    <button type="button" class="btn btn-role" onclick="selectRole('hotel')">
+                        <i class="fas fa-arrow-right"></i> Continue as Hotel
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Package Manager Card -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="role-card">
+                    <div class="card-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Tourism Package Manager</h3>
+                    <p>Create and manage tourism packages, connect with tourist guides, and help travelers discover amazing destinations.</p>
+                    <button type="button" class="btn btn-role" onclick="selectRole('package_manager')">
+                        <i class="fas fa-arrow-right"></i> Continue as Manager
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="text-primary-custom">Why Choose Our Platform?</h2>
+                <p class="text-muted">Discover the features that make us the best choice for your tourism needs</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-search fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Easy Search</h5>
+                    <p class="text-muted">Find hotels and packages by location with our advanced search functionality.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Secure Booking</h5>
+                    <p class="text-muted">Your personal information and bookings are protected with enterprise-grade security.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-users fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Expert Guides</h5>
+                    <p class="text-muted">Connect with experienced local guides who know the best spots and hidden gems.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-mobile-alt fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Mobile Friendly</h5>
+                    <p class="text-muted">Access our platform from any device with our responsive design.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="text-primary-custom">Our Impact</h2>
+                <p class="text-muted">Numbers that speak for themselves</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Hotels Listed</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Tourism Packages</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Expert Guides</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Role selection function with loading state - Optimized for speed
+    function selectRole(role) {
+        // Show loading state immediately
+        const buttons = document.querySelectorAll('.btn-role');
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        });
+
+        // Show loading overlay
+        if (window.showLoading) {
+            window.showLoading();
+        }
+
+        // Create form and submit immediately
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ url_for("select_role") }}';
+        form.style.display = 'none';
+        
+        const roleInput = document.createElement('input');
+        roleInput.type = 'hidden';
+        roleInput.name = 'role';
+        roleInput.value = role;
+        
+        form.appendChild(roleInput);
+        document.body.appendChild(form);
+        
+        // Submit immediately
+        setTimeout(() => {
+            form.submit();
+        }, 100); // Small delay to ensure loading state is visible
+    }
+
+    // Add some interactive animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click animations to role cards
+        const roleCards = document.querySelectorAll('.role-card');
+        roleCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Animate numbers on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const finalNumber = stat.textContent;
+                        const numericValue = parseInt(finalNumber.replace(/[^\d]/g, ''));
+                        if (numericValue) {
+                            animateNumber(stat, 0, numericValue, 2000);
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        const statsSection = document.querySelector('.py-5:last-of-type');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+
+    function animateNumber(element, start, end, duration) {
+        const startTime = performance.now();
+        const suffix = element.textContent.replace(/[\d]/g, '');
+        
+        function updateNumber(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const current = Math.floor(start + (end - start) * progress);
+            element.textContent = current + suffix;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            }
+        }
+        
+        requestAnimationFrame(updateNumber);
+    }
+</script>
+{% endblock %}

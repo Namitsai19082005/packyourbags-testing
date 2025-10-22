@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Search Hotels - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-search"></i> Search Hotels</h1>
+                <p class="lead">Find the perfect accommodation for your next trip</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="search-container">
+                <form method="GET" action="{{ url_for('customer_search_hotels') }}">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control search-input" name="location" 
+                                   placeholder="Enter city, state, or country..." value="{{ search_location }}">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn search-btn w-100">
+                                <i class="fas fa-search"></i> Search Hotels
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="row">
+        <div class="col-12">
+            {% if search_location %}
+                <div class="mb-3">
+                    <h5>Search Results for "{{ search_location }}"</h5>
+                    <p class="text-muted">{{ hotels|length }} hotel{{ 's' if hotels|length != 1 else '' }} found</p>
+                </div>
+            {% endif %}
+
+            {% if hotels %}
+                <div class="row">
+                    {% for hotel in hotels %}
+                    <div class="col-lg-6 col-xl-4 mb-4">
+                        <div class="hotel-card">
+                            <div class="hotel-name">{{ hotel.name }}</div>
+                            <div class="hotel-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ hotel.location }}
+                            </div>
+                            
+                            {% if hotel.description %}
+                            <div class="hotel-description">
+                                {{ hotel.description }}
+                            </div>
+                            {% endif %}
+
+                            {% if hotel.amenities %}
+                            <div class="mb-3">
+                                <h6 class="text-primary">
+                                    <i class="fas fa-star"></i> Amenities
+                                </h6>
+                                <p class="text-muted">{{ hotel.amenities }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if hotel.contact_info %}
+                            <div class="mb-3">
+                                <h6 class="text-primary">
+                                    <i class="fas fa-phone"></i> Contact Information
+                                </h6>
+                                <p class="text-muted">{{ hotel.contact_info }}</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> Listed on {{ hotel.created_at.strftime('%B %d, %Y') }}
+                                </small>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal{{ hotel.id }}">
+                                    <i class="fas fa-envelope"></i> Contact
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Modal -->
+                    <div class="modal fade" id="contactModal{{ hotel.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Contact {{ hotel.name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <h6><i class="fas fa-map-marker-alt"></i> Location</h6>
+                                        <p>{{ hotel.location }}</p>
+                                    </div>
+                                    
+                                    {% if hotel.contact_info %}
+                                    <div class="mb-3">
+                                        <h6><i class="fas fa-phone"></i> Contact Information</h6>
+                                        <p>{{ hotel.contact_info }}</p>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if hotel.description %}
+                                    <div class="mb-3">
+                                        <h6><i class="fas fa-info-circle"></i> Description</h6>
+                                        <p>{{ hotel.description }}</p>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if hotel.amenities %}
+                                    <div class="mb-3">
+                                        <h6><i class="fas fa-star"></i> Amenities</h6>
+                                        <p>{{ hotel.amenities }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <a href="tel:{{ hotel.contact_info }}" class="btn btn-primary">
+                                        <i class="fas fa-phone"></i> Call Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-hotel fa-4x text-muted mb-4"></i>
+                    <h4 class="text-muted">No Hotels Found</h4>
+                    <p class="text-muted">
+                        {% if search_location %}
+                            No hotels found for "{{ search_location }}". Try searching with a different location.
+                        {% else %}
+                            Start by searching for hotels in your desired location.
+                        {% endif %}
+                    </p>
+                    <a href="{{ url_for('customer_search_hotels') }}" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search Again
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back to Dashboard -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('customer_dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

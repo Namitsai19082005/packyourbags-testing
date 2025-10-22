@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Tourist Guide - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-edit"></i> Edit Tourist Guide</h1>
+                <p class="lead">Update guide information and details</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <form method="POST" action="{{ url_for('package_manager_edit_guide', guide_id=guide.id) }}" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-user"></i> Guide Name
+                        </label>
+                        <input type="text" class="form-control" id="name" name="name" required 
+                               value="{{ guide.name }}" placeholder="e.g., John Smith, Maria Garcia">
+                        <div class="invalid-feedback">
+                            Please provide the guide's name.
+                        </div>
+                        <div class="form-text">Enter the full name of the tourist guide</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contact_info" class="form-label">
+                            <i class="fas fa-phone"></i> Contact Information
+                        </label>
+                        <input type="text" class="form-control" id="contact_info" name="contact_info" required 
+                               value="{{ guide.contact_info }}" placeholder="e.g., +1-234-567-8900 or guide@email.com">
+                        <div class="invalid-feedback">
+                            Please provide contact information.
+                        </div>
+                        <div class="form-text">Phone number or email address for bookings</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="rate_per_day" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i> Rate Per Day
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="rate_per_day" name="rate_per_day" required 
+                                           min="0" step="0.01" value="{{ guide.rate_per_day }}" placeholder="0.00">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid daily rate.
+                                </div>
+                                <div class="form-text">How much does this guide charge per day?</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="experience_years" class="form-label">
+                                    <i class="fas fa-star"></i> Years of Experience
+                                </label>
+                                <input type="number" class="form-control" id="experience_years" name="experience_years" 
+                                       min="0" max="50" value="{{ guide.experience_years or 0 }}" placeholder="0">
+                                <div class="form-text">How many years of guiding experience?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="specialization" class="form-label">
+                            <i class="fas fa-compass"></i> Specialization
+                        </label>
+                        <input type="text" class="form-control" id="specialization" name="specialization" 
+                               value="{{ guide.specialization or '' }}" placeholder="e.g., Cultural Tours, Adventure Sports, Historical Sites, Nature Walks">
+                        <div class="form-text">What type of tours or activities does this guide specialize in?</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Guide
+                        </button>
+                        <a href="{{ url_for('package_manager_dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Guide Info Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Guide Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6><i class="fas fa-calendar text-primary"></i> Added</h6>
+                        <p class="text-muted">{{ guide.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-eye text-info"></i> Package Assignments</h6>
+                        <p class="text-muted">0 (Will be tracked soon)</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-phone text-success"></i> Contact Requests</h6>
+                        <p class="text-muted">0 (Will be tracked soon)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-eye"></i> Guide Preview</h5>
+                </div>
+                <div class="card-body">
+                    <div id="guidePreview">
+                        <div class="package-card">
+                            <div class="package-title">{{ guide.name }}</div>
+                            <div class="package-destination">
+                                <i class="fas fa-phone"></i> {{ guide.contact_info }}
+                            </div>
+                            <div class="package-description">
+                                <strong>Specialization:</strong> {{ guide.specialization or 'No specialization specified' }}
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="package-price">${{ "%.2f"|format(guide.rate_per_day) }}/day</div>
+                                <small class="text-muted">
+                                    <i class="fas fa-star"></i> {{ guide.experience_years or 0 }} years exp.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Real-time guide preview
+    function updatePreview() {
+        const name = document.getElementById('name').value || 'Guide Name';
+        const contact = document.getElementById('contact_info').value || 'Contact Information';
+        const rate = document.getElementById('rate_per_day').value || '0.00';
+        const experience = document.getElementById('experience_years').value || '0';
+        const specialization = document.getElementById('specialization').value || 'No specialization specified';
+        
+        const preview = document.getElementById('guidePreview');
+        preview.innerHTML = `
+            <div class="package-card">
+                <div class="package-title">${name}</div>
+                <div class="package-destination">
+                    <i class="fas fa-phone"></i> ${contact}
+                </div>
+                <div class="package-description">
+                    <strong>Specialization:</strong> ${specialization}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="package-price">$${parseFloat(rate).toFixed(2)}/day</div>
+                    <small class="text-muted">
+                        <i class="fas fa-star"></i> ${experience} years exp.
+                    </small>
+                </div>
+            </div>
+        `;
+    }
+
+    // Add event listeners for real-time preview
+    document.getElementById('name').addEventListener('input', updatePreview);
+    document.getElementById('contact_info').addEventListener('input', updatePreview);
+    document.getElementById('rate_per_day').addEventListener('input', updatePreview);
+    document.getElementById('experience_years').addEventListener('input', updatePreview);
+    document.getElementById('specialization').addEventListener('input', updatePreview);
+</script>
+{% endblock %}
+

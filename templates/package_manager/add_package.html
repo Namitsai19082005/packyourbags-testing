@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Add Tourism Package - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-plus"></i> Add New Tourism Package</h1>
+                <p class="lead">Create an exciting tourism package with expert guides</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <form method="POST" action="{{ url_for('package_manager_add_package') }}" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            <i class="fas fa-tag"></i> Package Title
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" required 
+                               placeholder="e.g., Amazing Bali Adventure, Cultural Heritage Tour">
+                        <div class="invalid-feedback">
+                            Please provide a package title.
+                        </div>
+                        <div class="form-text">Choose an attractive title that describes your package</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="destination" class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i> Destination
+                                </label>
+                                <input type="text" class="form-control" id="destination" name="destination" required 
+                                       placeholder="e.g., Bali, Indonesia">
+                                <div class="invalid-feedback">
+                                    Please provide a destination.
+                                </div>
+                                <div class="form-text">Where is this package located?</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="duration_days" class="form-label">
+                                    <i class="fas fa-clock"></i> Duration (Days)
+                                </label>
+                                <input type="number" class="form-control" id="duration_days" name="duration_days" required 
+                                       min="1" max="365" value="1" placeholder="1">
+                                <div class="invalid-feedback">
+                                    Please provide a valid duration.
+                                </div>
+                                <div class="form-text">How many days is this package?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            <i class="fas fa-align-left"></i> Package Description
+                        </label>
+                        <textarea class="form-control" id="description" name="description" rows="6" required 
+                                  placeholder="Describe the package itinerary, activities, attractions, and what makes it special..."></textarea>
+                        <div class="invalid-feedback">
+                            Please provide a detailed description.
+                        </div>
+                        <div class="form-text">Be detailed about the itinerary and activities included</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label">
+                            <i class="fas fa-dollar-sign"></i> Package Price
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="price" name="price" required 
+                                   min="0" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="invalid-feedback">
+                            Please provide a valid price.
+                        </div>
+                        <div class="form-text">Set a competitive price for your package</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-user-tie"></i> Suggested Tourist Guides
+                        </label>
+                        <div class="form-text mb-2">Select guides who can lead this package (optional)</div>
+                        
+                        {% if guides %}
+                            <div class="row">
+                                {% for guide in guides %}
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="guide_ids" value="{{ guide.id }}" id="guide{{ guide.id }}">
+                                        <label class="form-check-label" for="guide{{ guide.id }}">
+                                            <strong>{{ guide.name }}</strong><br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-phone"></i> {{ guide.contact_info }}<br>
+                                                <i class="fas fa-dollar-sign"></i> ${{ "%.2f"|format(guide.rate_per_day) }}/day
+                                                {% if guide.specialization %}<br><i class="fas fa-star"></i> {{ guide.specialization }}{% endif %}
+                                            </small>
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> No guides available. 
+                                <a href="{{ url_for('package_manager_add_guide') }}" class="alert-link">Add guides first</a> to suggest them for packages.
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inclusions" class="form-label">
+                            <i class="fas fa-check-circle"></i> Package Inclusions
+                        </label>
+                        <textarea class="form-control" id="inclusions" name="inclusions" rows="4" 
+                                  placeholder="List what's included in this package (e.g., Accommodation, Meals, Transportation, Entrance fees, etc.)"></textarea>
+                        <div class="form-text">Be specific about what's included in the package price</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exclusions" class="form-label">
+                            <i class="fas fa-times-circle"></i> Package Exclusions
+                        </label>
+                        <textarea class="form-control" id="exclusions" name="exclusions" rows="3" 
+                                  placeholder="List what's NOT included (e.g., Personal expenses, Optional activities, etc.)"></textarea>
+                        <div class="form-text">Optional: List what's not included in the package</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="requirements" class="form-label">
+                            <i class="fas fa-exclamation-triangle"></i> Requirements & Notes
+                        </label>
+                        <textarea class="form-control" id="requirements" name="requirements" rows="3" 
+                                  placeholder="Any special requirements, health considerations, or important notes for travelers..."></textarea>
+                        <div class="form-text">Optional: Add any special requirements or important notes</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Create Package
+                        </button>
+                        <a href="{{ url_for('package_manager_dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Tips Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-lightbulb"></i> Package Creation Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6><i class="fas fa-tag text-primary"></i> Title Tips</h6>
+                        <ul class="small text-muted">
+                            <li>Use descriptive and attractive titles</li>
+                            <li>Include destination and activity type</li>
+                            <li>Keep it concise but compelling</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-map-marker-alt text-success"></i> Destination Tips</h6>
+                        <ul class="small text-muted">
+                            <li>Be specific about location</li>
+                            <li>Include city and country</li>
+                            <li>Consider popular landmarks</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-dollar-sign text-warning"></i> Pricing Tips</h6>
+                        <ul class="small text-muted">
+                            <li>Research competitor pricing</li>
+                            <li>Consider all included services</li>
+                            <li>Offer value for money</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-eye"></i> Package Preview</h5>
+                </div>
+                <div class="card-body">
+                    <div id="packagePreview">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-map-marked-alt fa-2x mb-2"></i>
+                            <p>Your package preview will appear here as you type...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Real-time package preview
+    function updatePreview() {
+        const title = document.getElementById('title').value || 'Package Title';
+        const destination = document.getElementById('destination').value || 'Destination';
+        const description = document.getElementById('description').value || 'Package description will appear here...';
+        const price = document.getElementById('price').value || '0.00';
+        const duration = document.getElementById('duration_days').value || '1';
+        
+        const preview = document.getElementById('packagePreview');
+        preview.innerHTML = `
+            <div class="package-card">
+                <div class="package-title">${title}</div>
+                <div class="package-destination">
+                    <i class="fas fa-map-marker-alt"></i> ${destination}
+                </div>
+                <div class="package-description">${description.substring(0, 100)}${description.length > 100 ? '...' : ''}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="package-price">$${parseFloat(price).toFixed(2)}</div>
+                    <small class="text-muted">
+                        <i class="fas fa-clock"></i> ${duration} day${duration != 1 ? 's' : ''}
+                    </small>
+                </div>
+            </div>
+        `;
+    }
+
+    // Add event listeners for real-time preview
+    document.getElementById('title').addEventListener('input', updatePreview);
+    document.getElementById('destination').addEventListener('input', updatePreview);
+    document.getElementById('description').addEventListener('input', updatePreview);
+    document.getElementById('price').addEventListener('input', updatePreview);
+    document.getElementById('duration_days').addEventListener('input', updatePreview);
+
+    // Character counter for description
+    const descriptionTextarea = document.getElementById('description');
+    const counter = document.createElement('small');
+    counter.className = 'text-muted';
+    counter.style.float = 'right';
+    descriptionTextarea.parentNode.appendChild(counter);
+    
+    function updateCounter() {
+        const remaining = 2000 - descriptionTextarea.value.length;
+        counter.textContent = `${remaining} characters remaining`;
+        if (remaining < 200) {
+            counter.className = 'text-warning';
+        } else {
+            counter.className = 'text-muted';
+        }
+    }
+    
+    descriptionTextarea.addEventListener('input', updateCounter);
+    updateCounter();
+</script>
+{% endblock %}
+

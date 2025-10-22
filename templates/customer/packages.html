@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Tourism Packages - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-map-marked-alt"></i> Tourism Packages</h1>
+                <p class="lead">Discover amazing travel experiences and connect with expert guides</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Options -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="search-container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control search-input" id="packageSearch" 
+                               placeholder="Search packages by title or destination...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="priceFilter">
+                            <option value="">All Prices</option>
+                            <option value="0-100">Under $100</option>
+                            <option value="100-500">$100 - $500</option>
+                            <option value="500-1000">$500 - $1000</option>
+                            <option value="1000+">Over $1000</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="durationFilter">
+                            <option value="">All Durations</option>
+                            <option value="1">1 Day</option>
+                            <option value="2-3">2-3 Days</option>
+                            <option value="4-7">4-7 Days</option>
+                            <option value="7+">Over 7 Days</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Packages Grid -->
+    <div class="row">
+        <div class="col-12">
+            {% if packages %}
+                <div class="row" id="packagesContainer">
+                    {% for package in packages %}
+                    <div class="col-lg-6 col-xl-4 mb-4 package-item" 
+                         data-title="{{ package.title|lower }}" 
+                         data-destination="{{ package.destination|lower }}"
+                         data-price="{{ package.price }}"
+                         data-duration="{{ package.duration_days or 1 }}">
+                        <div class="package-card">
+                            <div class="package-title">{{ package.title }}</div>
+                            <div class="package-destination">
+                                <i class="fas fa-map-marker-alt"></i> {{ package.destination }}
+                            </div>
+                            
+                            <div class="package-description">
+                                {{ package.description }}
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="package-price">${{ "%.2f"|format(package.price) }}</div>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock"></i> {{ package.duration_days or 1 }} day{{ 's' if package.duration_days != 1 else '' }}
+                                </small>
+                            </div>
+
+                            {% if package.guide_names %}
+                            <div class="guide-info">
+                                <h6 class="text-primary mb-2">
+                                    <i class="fas fa-user-tie"></i> Suggested Guides
+                                </h6>
+                                {% set guide_names = package.guide_names.split(', ') %}
+                                {% set guide_contacts = package.guide_contacts.split(', ') %}
+                                {% set guide_rates = package.guide_rates.split(', ') %}
+                                
+                                {% for i in range(guide_names|length) %}
+                                <div class="mb-2">
+                                    <div class="guide-name">{{ guide_names[i] }}</div>
+                                    <div class="text-muted small">
+                                        <i class="fas fa-phone"></i> {{ guide_contacts[i] }}
+                                    </div>
+                                    <div class="guide-rate">
+                                        <i class="fas fa-dollar-sign"></i> {{ guide_rates[i] }}/day
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-user"></i> Created by {{ package.created_by_name }}
+                                </small>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#packageModal{{ package.id }}">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Package Details Modal -->
+                    <div class="modal fade" id="packageModal{{ package.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ package.title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6><i class="fas fa-map-marker-alt"></i> Destination</h6>
+                                            <p>{{ package.destination }}</p>
+                                            
+                                            <h6><i class="fas fa-dollar-sign"></i> Price</h6>
+                                            <p class="package-price">${{ "%.2f"|format(package.price) }}</p>
+                                            
+                                            <h6><i class="fas fa-clock"></i> Duration</h6>
+                                            <p>{{ package.duration_days or 1 }} day{{ 's' if package.duration_days != 1 else '' }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6><i class="fas fa-info-circle"></i> Description</h6>
+                                            <p>{{ package.description }}</p>
+                                        </div>
+                                    </div>
+
+                                    {% if package.guide_names %}
+                                    <hr>
+                                    <h6><i class="fas fa-user-tie"></i> Available Guides</h6>
+                                    <div class="row">
+                                        {% set guide_names = package.guide_names.split(', ') %}
+                                        {% set guide_contacts = package.guide_contacts.split(', ') %}
+                                        {% set guide_rates = package.guide_rates.split(', ') %}
+                                        
+                                        {% for i in range(guide_names|length) %}
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">{{ guide_names[i] }}</h6>
+                                                    <p class="card-text">
+                                                        <i class="fas fa-phone"></i> {{ guide_contacts[i] }}<br>
+                                                        <i class="fas fa-dollar-sign"></i> ${{ guide_rates[i] }}/day
+                                                    </p>
+                                                    <a href="tel:{{ guide_contacts[i] }}" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-phone"></i> Contact Guide
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6><i class="fas fa-user"></i> Package Manager</h6>
+                                            <p>{{ package.created_by_name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success">
+                                        <i class="fas fa-bookmark"></i> Save Package
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-map-marked-alt fa-4x text-muted mb-4"></i>
+                    <h4 class="text-muted">No Tourism Packages Available</h4>
+                    <p class="text-muted">Check back later for exciting travel packages!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back to Dashboard -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('customer_dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Package search and filtering
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('packageSearch');
+        const priceFilter = document.getElementById('priceFilter');
+        const durationFilter = document.getElementById('durationFilter');
+        const packageItems = document.querySelectorAll('.package-item');
+
+        function filterPackages() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const priceRange = priceFilter.value;
+            const durationRange = durationFilter.value;
+
+            packageItems.forEach(item => {
+                const title = item.dataset.title;
+                const destination = item.dataset.destination;
+                const price = parseFloat(item.dataset.price);
+                const duration = parseInt(item.dataset.duration);
+
+                let showItem = true;
+
+                // Search filter
+                if (searchTerm && !title.includes(searchTerm) && !destination.includes(searchTerm)) {
+                    showItem = false;
+                }
+
+                // Price filter
+                if (priceRange) {
+                    const [min, max] = priceRange.split('-').map(p => p === '' ? Infinity : parseFloat(p));
+                    if (price < min || (max !== Infinity && price > max)) {
+                        showItem = false;
+                    }
+                }
+
+                // Duration filter
+                if (durationRange) {
+                    if (durationRange === '1' && duration !== 1) {
+                        showItem = false;
+                    } else if (durationRange === '2-3' && (duration < 2 || duration > 3)) {
+                        showItem = false;
+                    } else if (durationRange === '4-7' && (duration < 4 || duration > 7)) {
+                        showItem = false;
+                    } else if (durationRange === '7+' && duration <= 7) {
+                        showItem = false;
+                    }
+                }
+
+                item.style.display = showItem ? 'block' : 'none';
+            });
+
+            // Update results count
+            const visibleItems = Array.from(packageItems).filter(item => item.style.display !== 'none');
+            const resultsText = document.getElementById('resultsCount');
+            if (resultsText) {
+                resultsText.textContent = `${visibleItems.length} package${visibleItems.length !== 1 ? 's' : ''} found`;
+            }
+        }
+
+        searchInput.addEventListener('input', debounce(filterPackages, 300));
+        priceFilter.addEventListener('change', filterPackages);
+        durationFilter.addEventListener('change', filterPackages);
+
+        // Initial filter
+        filterPackages();
+    });
+</script>
+{% endblock %}

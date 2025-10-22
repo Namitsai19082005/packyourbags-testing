@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Add Tourist Guide - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-user-plus"></i> Add New Tourist Guide</h1>
+                <p class="lead">Add expert guides to enhance your tourism packages</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <form method="POST" action="{{ url_for('package_manager_add_guide') }}" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-user"></i> Guide Name
+                        </label>
+                        <input type="text" class="form-control" id="name" name="name" required 
+                               placeholder="e.g., John Smith, Maria Garcia">
+                        <div class="invalid-feedback">
+                            Please provide the guide's name.
+                        </div>
+                        <div class="form-text">Enter the full name of the tourist guide</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contact_info" class="form-label">
+                            <i class="fas fa-phone"></i> Contact Information
+                        </label>
+                        <input type="text" class="form-control" id="contact_info" name="contact_info" required 
+                               placeholder="e.g., +1-234-567-8900 or guide@email.com">
+                        <div class="invalid-feedback">
+                            Please provide contact information.
+                        </div>
+                        <div class="form-text">Phone number or email address for bookings</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="rate_per_day" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i> Rate Per Day
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="rate_per_day" name="rate_per_day" required 
+                                           min="0" step="0.01" placeholder="0.00">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a valid daily rate.
+                                </div>
+                                <div class="form-text">How much does this guide charge per day?</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="experience_years" class="form-label">
+                                    <i class="fas fa-star"></i> Years of Experience
+                                </label>
+                                <input type="number" class="form-control" id="experience_years" name="experience_years" 
+                                       min="0" max="50" value="0" placeholder="0">
+                                <div class="form-text">How many years of guiding experience?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="specialization" class="form-label">
+                            <i class="fas fa-compass"></i> Specialization
+                        </label>
+                        <input type="text" class="form-control" id="specialization" name="specialization" 
+                               placeholder="e.g., Cultural Tours, Adventure Sports, Historical Sites, Nature Walks">
+                        <div class="form-text">What type of tours or activities does this guide specialize in?</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="languages" class="form-label">
+                            <i class="fas fa-language"></i> Languages Spoken
+                        </label>
+                        <input type="text" class="form-control" id="languages" name="languages" 
+                               placeholder="e.g., English, Spanish, French">
+                        <div class="form-text">What languages can this guide communicate in?</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="certifications" class="form-label">
+                            <i class="fas fa-certificate"></i> Certifications & Qualifications
+                        </label>
+                        <textarea class="form-control" id="certifications" name="certifications" rows="3" 
+                                  placeholder="List any professional certifications, licenses, or qualifications..."></textarea>
+                        <div class="form-text">Optional: List any professional certifications or qualifications</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">
+                            <i class="fas fa-user-circle"></i> Guide Biography
+                        </label>
+                        <textarea class="form-control" id="bio" name="bio" rows="4" 
+                                  placeholder="Tell us about this guide's background, experience, and what makes them special..."></textarea>
+                        <div class="form-text">Optional: A brief biography about the guide</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="availability" class="form-label">
+                            <i class="fas fa-calendar"></i> Availability Notes
+                        </label>
+                        <textarea class="form-control" id="availability" name="availability" rows="2" 
+                                  placeholder="Any notes about availability, preferred seasons, or scheduling..."></textarea>
+                        <div class="form-text">Optional: Notes about when this guide is typically available</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Add Guide
+                        </button>
+                        <a href="{{ url_for('package_manager_dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Tips Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-lightbulb"></i> Guide Addition Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6><i class="fas fa-user text-primary"></i> Contact Information</h6>
+                        <ul class="small text-muted">
+                            <li>Provide reliable contact details</li>
+                            <li>Include phone number or email</li>
+                            <li>Ensure guide is reachable</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-dollar-sign text-success"></i> Pricing</h6>
+                        <ul class="small text-muted">
+                            <li>Set competitive daily rates</li>
+                            <li>Consider local market rates</li>
+                            <li>Factor in guide's experience</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-star text-warning"></i> Specialization</h6>
+                        <ul class="small text-muted">
+                            <li>Be specific about expertise</li>
+                            <li>Highlight unique skills</li>
+                            <li>Match guides to package types</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Card -->
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-eye"></i> Guide Preview</h5>
+                </div>
+                <div class="card-body">
+                    <div id="guidePreview">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-user-tie fa-2x mb-2"></i>
+                            <p>Your guide preview will appear here as you type...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Real-time guide preview
+    function updatePreview() {
+        const name = document.getElementById('name').value || 'Guide Name';
+        const contact = document.getElementById('contact_info').value || 'Contact Information';
+        const rate = document.getElementById('rate_per_day').value || '0.00';
+        const experience = document.getElementById('experience_years').value || '0';
+        const specialization = document.getElementById('specialization').value || 'No specialization specified';
+        
+        const preview = document.getElementById('guidePreview');
+        preview.innerHTML = `
+            <div class="package-card">
+                <div class="package-title">${name}</div>
+                <div class="package-destination">
+                    <i class="fas fa-phone"></i> ${contact}
+                </div>
+                <div class="package-description">
+                    <strong>Specialization:</strong> ${specialization}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="package-price">$${parseFloat(rate).toFixed(2)}/day</div>
+                    <small class="text-muted">
+                        <i class="fas fa-star"></i> ${experience} years exp.
+                    </small>
+                </div>
+            </div>
+        `;
+    }
+
+    // Add event listeners for real-time preview
+    document.getElementById('name').addEventListener('input', updatePreview);
+    document.getElementById('contact_info').addEventListener('input', updatePreview);
+    document.getElementById('rate_per_day').addEventListener('input', updatePreview);
+    document.getElementById('experience_years').addEventListener('input', updatePreview);
+    document.getElementById('specialization').addEventListener('input', updatePreview);
+
+    // Character counter for bio
+    const bioTextarea = document.getElementById('bio');
+    const counter = document.createElement('small');
+    counter.className = 'text-muted';
+    counter.style.float = 'right';
+    bioTextarea.parentNode.appendChild(counter);
+    
+    function updateCounter() {
+        const remaining = 500 - bioTextarea.value.length;
+        counter.textContent = `${remaining} characters remaining`;
+        if (remaining < 50) {
+            counter.className = 'text-warning';
+        } else {
+            counter.className = 'text-muted';
+        }
+    }
+    
+    bioTextarea.addEventListener('input', updateCounter);
+    updateCounter();
+</script>
+{% endblock %}
+

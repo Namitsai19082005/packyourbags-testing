@@ -1,0 +1,137 @@
+{% extends "base_simple.html" %}
+
+{% block title %}Welcome - Tourism Management System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-map-marked-alt"></i> Tourism Management System</h1>
+                <p>Your gateway to amazing travel experiences, hotel bookings, and tourism packages</p>
+                <p class="lead">Choose your role to get started</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Role Selection Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="text-primary">Choose Your Role</h2>
+                <p class="text-muted">Select the option that best describes you</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Customer Card -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="role-card text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-tie fa-3x text-primary"></i>
+                    </div>
+                    <h3>Customer</h3>
+                    <p>Looking for amazing travel experiences? Browse hotels, tourism packages, and connect with local guides to plan your perfect trip.</p>
+                    <form method="POST" action="{{ url_for('select_role') }}" style="display: inline;">
+                        <input type="hidden" name="role" value="customer">
+                        <button type="submit" class="btn-role">
+                            <i class="fas fa-arrow-right"></i> Continue as Customer
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Hotel Card -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="role-card text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-hotel fa-3x text-primary"></i>
+                    </div>
+                    <h3>Hotel Owner</h3>
+                    <p>Manage your hotel listings and create attractive packages for travelers. Showcase your amenities and attract more guests.</p>
+                    <form method="POST" action="{{ url_for('select_role') }}" style="display: inline;">
+                        <input type="hidden" name="role" value="hotel">
+                        <button type="submit" class="btn-role">
+                            <i class="fas fa-arrow-right"></i> Continue as Hotel
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Package Manager Card -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="role-card text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-route fa-3x text-primary"></i>
+                    </div>
+                    <h3>Tourism Package Manager</h3>
+                    <p>Create and manage tourism packages, connect with tourist guides, and help travelers discover amazing destinations.</p>
+                    <form method="POST" action="{{ url_for('select_role') }}" style="display: inline;">
+                        <input type="hidden" name="role" value="package_manager">
+                        <button type="submit" class="btn-role">
+                            <i class="fas fa-arrow-right"></i> Continue as Manager
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="text-primary">Why Choose Our Platform?</h2>
+                <p class="text-muted">Discover the features that make us the best choice for your tourism needs</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-search fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Easy Search</h5>
+                    <p class="text-muted">Find hotels and packages by location with our advanced search functionality.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Secure Booking</h5>
+                    <p class="text-muted">Your personal information and bookings are protected with enterprise-grade security.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-users fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Expert Guides</h5>
+                    <p class="text-muted">Connect with experienced local guides who know the best spots and hidden gems.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-mobile-alt fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Mobile Friendly</h5>
+                    <p class="text-muted">Access our platform from any device with our responsive design.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

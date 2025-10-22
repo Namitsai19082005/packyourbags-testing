@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Package Manager Dashboard - Tourism Management System{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-route"></i> Welcome, {{ session.username }}!</h1>
+                <p class="lead">Manage tourism packages and connect with expert guides</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ packages|length }}</div>
+                    <div class="stat-label">Active Packages</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ guides|length }}</div>
+                    <div class="stat-label">Available Guides</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Package Views</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Inquiries</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('package_manager_add_package') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-plus"></i> Add Package
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('package_manager_add_guide') }}" class="btn btn-success w-100">
+                                <i class="fas fa-user-plus"></i> Add Guide
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#analyticsModal">
+                                <i class="fas fa-chart-line"></i> Analytics
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#reportsModal">
+                                <i class="fas fa-file-alt"></i> Reports
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tourism Packages Management -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-map-marked-alt"></i> Tourism Packages</h5>
+                    <a href="{{ url_for('package_manager_add_package') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Package
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if packages %}
+                        <div class="row">
+                            {% for package in packages %}
+                            <div class="col-lg-6 col-xl-4 mb-4">
+                                <div class="package-card">
+                                    <div class="package-title">{{ package.title }}</div>
+                                    <div class="package-destination">
+                                        <i class="fas fa-map-marker-alt"></i> {{ package.destination }}
+                                    </div>
+                                    
+                                    <div class="package-description">
+                                        {{ package.description[:100] }}{% if package.description|length > 100 %}...{% endif %}
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="package-price">${{ "%.2f"|format(package.price) }}</div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock"></i> {{ package.duration_days or 1 }} day{{ 's' if package.duration_days != 1 else '' }}
+                                        </small>
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ url_for('package_manager_edit_package', package_id=package.id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="{{ url_for('package_manager_delete_package', package_id=package.id) }}" 
+                                           class="btn btn-danger btn-sm btn-delete">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Packages Yet</h5>
+                            <p class="text-muted">Create your first tourism package to start attracting travelers!</p>
+                            <a href="{{ url_for('package_manager_add_package') }}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Your First Package
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tourist Guides Management -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="custom-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-user-tie"></i> Tourist Guides</h5>
+                    <a href="{{ url_for('package_manager_add_guide') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Add New Guide
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if guides %}
+                        <div class="row">
+                            {% for guide in guides %}
+                            <div class="col-lg-6 col-xl-4 mb-4">
+                                <div class="package-card">
+                                    <div class="package-title">{{ guide.name }}</div>
+                                    <div class="package-destination">
+                                        <i class="fas fa-phone"></i> {{ guide.contact_info }}
+                                    </div>
+                                    
+                                    {% if guide.specialization %}
+                                    <div class="package-description">
+                                        <strong>Specialization:</strong> {{ guide.specialization }}
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="package-price">${{ "%.2f"|format(guide.rate_per_day) }}/day</div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-star"></i> {{ guide.experience_years or 0 }} years exp.
+                                        </small>
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ url_for('package_manager_edit_guide', guide_id=guide.id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="{{ url_for('package_manager_delete_guide', guide_id=guide.id) }}" 
+                                           class="btn btn-danger btn-sm btn-delete">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-user-tie fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Guides Yet</h5>
+                            <p class="text-muted">Add tourist guides to enhance your packages!</p>
+                            <a href="{{ url_for('package_manager_add_guide') }}" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Add Your First Guide
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Modal -->
+<div class="modal fade" id="analyticsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Package Analytics</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h6>Total Package Views</h6>
+                            <div class="stat-number">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h6>Customer Inquiries</h6>
+                            <div class="stat-number">0</div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center py-3">
+                    <p class="text-muted">Analytics data will be available once your packages start receiving traffic.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reports Modal -->
+<div class="modal fade" id="reportsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Package Reports</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-4">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Reports Available</h5>
+                    <p class="text-muted">Reports will be generated once you have package activity data.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
