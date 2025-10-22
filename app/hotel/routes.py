@@ -26,6 +26,18 @@ def dashboard():
     if not require_hotel_manager():
         return redirect(url_for("auth.post_login_redirect"))
     hotel = Hotel.query.filter_by(user_id=current_user.id).first()
+    if not hotel:
+        # Auto-provision a placeholder hotel to satisfy templates
+        hotel = Hotel(
+            user_id=current_user.id,
+            name=f"{current_user.username}'s Hotel",
+            location="",
+            description="",
+            contact_info="",
+            amenities="",
+        )
+        db.session.add(hotel)
+        db.session.commit()
     packages = []
     if hotel:
         packages = HotelPackage.query.filter_by(hotel_id=hotel.id).all()

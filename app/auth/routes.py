@@ -48,8 +48,8 @@ def signup():
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    # Generic login page (defaults to customer view) with role-agnostic authentication
     if request.method == "GET":
-        # Render role-specific login pages if you have them; fallback to customer/login.html
         return render_template("customer/login.html")
 
     username_or_email = request.form.get("username") or request.form.get("email")
@@ -62,9 +62,19 @@ def login():
         .limit(1)
         .first()
     )
-    if not user or not user.check_password(password):
+    if not user:
         flash("Invalid credentials.", "danger")
         return redirect(url_for("auth.login"))
+
+    # Check hashed password first
+    if not user.check_password(password):
+        # Fallback: plaintext password in DB (upgrade on success)
+        if user.password == password:
+            user.set_password(password)
+            db.session.commit()
+        else:
+            flash("Invalid credentials.", "danger")
+            return redirect(url_for("auth.login"))
 
     login_user(user)
     session["user_id"] = user.id
@@ -202,9 +212,18 @@ def _handle_login(template_name: str, expected_role: Role | None):
         .limit(1)
         .first()
     )
-    if not user or not user.check_password(password):
+    if not user:
         flash("Invalid credentials.", "danger")
         return redirect(request.url)
+
+    if not user.check_password(password):
+        # Fallback to plaintext (legacy seed data) and upgrade
+        if user.password == password:
+            user.set_password(password)
+            db.session.commit()
+        else:
+            flash("Invalid credentials.", "danger")
+            return redirect(request.url)
 
     if expected_role and (user.role != expected_role):
         flash("Invalid role for this login page.", "danger")

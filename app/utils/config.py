@@ -1,10 +1,13 @@
 import os
+from urllib.parse import quote_plus
 
 
 def load_config(app):
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-change")
     mysql_user = os.getenv("MYSQL_USER", "root")
-    mysql_password = os.getenv("MYSQL_PASSWORD", "Namit#123")
+    raw_password = os.getenv("MYSQL_PASSWORD", "Namit#123")
+    # URL-encode password to handle special characters like '#'
+    mysql_password = quote_plus(raw_password)
     mysql_host = os.getenv("MYSQL_HOST", "127.0.0.1")
     mysql_port = int(os.getenv("MYSQL_PORT", "3306"))
     mysql_db = os.getenv("MYSQL_DB", "tourism_management")
